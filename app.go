@@ -91,8 +91,8 @@ func (a *App) Estado() Estado {
 		Porto:       p,
 		Tao:         instalado(dirTao(), nomeBinTao),
 		Lua:         instalado(dirLua(), nomeBinLua),
-		DirTao:      dirTao(),
-		DirLua:      dirLua(),
+		DirTao:      raizApp(dirTao()),
+		DirLua:      raizApp(dirLua()),
 		DirArquivos: r.Raiz,
 		Rexistro:    r.Rexistro,
 	}
@@ -104,50 +104,41 @@ func (a *App) Estado() Estado {
 
 // ── Instalación ──────────────────────────────────────────────────────────────
 
-func (a *App) InstalarFileBrowser(usuario, contrasinal string) bool {
-	return a.tarefa("fb", func(log func(string)) (map[string]any, error) {
-		porto, err := instalarFileBrowser(a.tr, strings.TrimSpace(usuario), contrasinal, log)
-		if err != nil {
-			return nil, err
-		}
-		urls := urlsAlumnado(porto)
-		log(a.tr.T("fb.log.urls"))
-		for _, u := range urls {
-			log("   " + u)
-		}
-		return map[string]any{"porto": porto, "urls": urls}, nil
+// Cada botón é unha tarefaAdmin (tarefas.go). comoAdministrador (plataforma_<so>.go)
+// execútaa aquí mesmo en Windows e Debian, onde o instalador xa corre elevado, e en
+// macOS nun proceso aparte con permisos de administrador só cando fai falta.
+
+func (a *App) executar(evento string, t tarefaAdmin) bool {
+	t.Idioma = a.tr.Idioma()
+	return a.tarefa(evento, func(log func(string)) (map[string]any, error) {
+		return comoAdministrador(a.tr, t, log)
 	})
+}
+
+func (a *App) InstalarFileBrowser(usuario, contrasinal string) bool {
+	return a.executar("fb", tarefaAdmin{Nome: tarefaFBInstalar,
+		Usuario: strings.TrimSpace(usuario), Contrasinal: contrasinal})
 }
 
 func (a *App) InstalarTao() bool {
-	return a.tarefa("tao", func(log func(string)) (map[string]any, error) {
-		return nil, instalarTao(a.tr, log)
-	})
+	return a.executar("tao", tarefaAdmin{Nome: tarefaTaoInstalar})
 }
 
 func (a *App) InstalarLua(conDeps bool) bool {
-	return a.tarefa("lua", func(log func(string)) (map[string]any, error) {
-		return nil, instalarLua(a.tr, a.tr.Idioma(), conDeps, log)
-	})
+	return a.executar("lua", tarefaAdmin{Nome: tarefaLuaInstalar, Deps: conDeps})
 }
 
 // ── Desinstalación ───────────────────────────────────────────────────────────
 
 func (a *App) DesinstalarFileBrowser(borrarDatos bool) bool {
-	return a.tarefa("desinstfb", func(log func(string)) (map[string]any, error) {
-		return nil, desinstalarFileBrowser(a.tr, borrarDatos, log)
-	})
+	return a.executar("desinstfb", tarefaAdmin{Nome: tarefaFBDesinstalar, BorrarDatos: borrarDatos})
 }
 
 func (a *App) DesinstalarTao(borrarDatos bool) bool {
-	return a.tarefa("desinsttao", func(log func(string)) (map[string]any, error) {
-		return nil, desinstalarTao(a.tr, borrarDatos, log)
-	})
+	return a.executar("desinsttao", tarefaAdmin{Nome: tarefaTaoDesinstalar, BorrarDatos: borrarDatos})
 }
 
 func (a *App) DesinstalarLua(borrarDeps bool) bool {
-	return a.tarefa("desinstlua", func(log func(string)) (map[string]any, error) {
-		return nil, desinstalarLua(a.tr, borrarDeps, log)
-	})
+	return a.executar("desinstlua", tarefaAdmin{Nome: tarefaLuaDesinstalar, Deps: borrarDeps})
 }
 

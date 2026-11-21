@@ -325,5 +325,9 @@ func escribirServidorTao(dirTao string, porto int) error {
 	}
 	contido := "# Xerado polo instalador de aula de Piztu: servidor File Browser deste equipo.\n" +
 		urlPublicaFB("localhost", porto) + "\n"
-	return os.WriteFile(filepath.Join(dirTao, "tao-servidor.conf"), []byte(contido), 0o644)
+	ruta := filepath.Join(dirTao, "tao-servidor.conf")
+	// Borrar antes de escribir: en macOS pode deixalo root (o paso de File Browser) dentro
+	// dun Tao.app do usuario, e o usuario pode borralo pero non sobrescribilo.
+	os.Remove(ruta)
+	return os.WriteFile(ruta, []byte(contido), 0o644)
 }

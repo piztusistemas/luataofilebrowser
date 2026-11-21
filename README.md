@@ -24,7 +24,8 @@ ficheiro → reinicio → login de novo. Se Tao xa estaba configurado, actualíz
 - `filebrowser.go`, `instalar.go`: lóxica común a todos os sistemas.
 - `plataforma_windows.go`: servizo, ACL, firewall, accesos directos, winget.
 - `plataforma_linux.go`: Debian — servizo systemd (`piztu-filebrowser`, conta `www-data`), ufw, `.desktop`, apt.
-- `plataforma_macos.go`: sitio para macOS (aínda sen facer).
+- `plataforma_macos.go`: macOS — LaunchDaemon de launchd (`gal.omeu.piztu.filebrowser`, conta `_www`), firewall de aplicacións, bundles `.app`, Homebrew.
+- `tarefas.go`: cada botón coma unha tarefa, para que macOS poida facela nun proceso con permisos de administrador.
 - `cmd/fbservizo`: servizo de Windows que lanza Quantum (Quantum non fala co SCM).
 
 ## Compilar (Windows)
@@ -62,3 +63,34 @@ sudo apt install build-essential pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev
 
 Saída: `build/bin/instalador-aula` e o seu `.sha256`. O SHA-256 do binario Linux de
 Quantum está fixado en `build-linux.sh`.
+
+## macOS
+
+Tao e Lúa instálanse coma `/Applications/Tao.app` e `/Applications/Lua.app` (o mesmo
+sitio que o instalador propio de Lúa para Mac, que queda substituído); aparecen en
+Launchpad e Spotlight. File Browser queda en `/Library/Application Support/Piztu/FileBrowser`
+(programa, `config.yaml` e `datos/`), os arquivos en `/Users/Shared/Piztu/arquivos` e o
+rexistro en `/Library/Logs/Piztu/filebrowser.log`. Corre coma LaunchDaemon coa conta
+`_www`: desde macOS 10.14 calquera proceso pode escoitar no porto 80. Se o firewall de
+macOS está activo, engádese File Browser á súa lista de aplicacións permitidas. Lúa pode
+instalar con Homebrew MacTeX (`mactex-no-gui`), Pandoc e Poppler; se non hai Homebrew,
+instálao.
+
+O instalador ábrese cun dobre clic e **non** se executa con sudo: Homebrew négase a
+funcionar coma root. Os pasos que precisan root (File Browser sempre; Tao e Lúa só se
+`/Applications` non se pode escribir) piden o contrasinal dun administrador co diálogo do
+sistema e fanse nun proceso aparte (o propio instalador con `--piztu-tarefa-admin`).
+
+```bash
+xcode-select --install     # compilador de C (cgo), lipo e codesign
+./build-macos.sh           # descarga e verifica binarios, tests, compila universal
+```
+
+Saída: `build/bin/instalador-aula.app` (universal, Apple Silicon e Intel, asinado ad hoc)
+e `build/bin/instalador-aula-macos_<versión>.zip` co seu `.sha256`. Os SHA-256 dos
+binarios de Quantum para macOS están fixados en `build-macos.sh`; o universal asínase ad
+hoc porque a release só trae asinado o de arm64.
+
+Coma non está notarizado, a primeira vez que se abre un instalador descargado macOS
+bloquéao: clic dereito → Abrir, ou Axustes do Sistema → Privacidade e seguridade →
+«Abrir igualmente».

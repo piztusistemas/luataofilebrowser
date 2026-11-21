@@ -398,3 +398,14 @@ func comandoOculto(nome string, args ...string) *exec.Cmd {
 func asegurarPrivilexios()              {}
 func dirConfigUsuario() (string, error) { return os.UserConfigDir() }
 func axustarPropietario(string)         {}
+
+// ── Ganchos que só usa macOS ─────────────────────────────────────────────────
+
+// O instalador xa corre como administrador: a tarefa faise aquí mesmo.
+func comoAdministrador(tr *Translator, t tarefaAdmin, log func(string)) (map[string]any, error) {
+	return executarTarefa(tr, t, log)
+}
+
+func prepararApp(string, string) error     { return nil } // un .exe solto non leva bundle
+func raizApp(dir string) string            { return dir }
+func configFBSenContrasinal(fbRutas) error { return nil } // a ACL xa vale como está

@@ -10,7 +10,7 @@ vars:
   # tasks below dispatch to the matching platform Taskfile via this variable.
   GOOS: '{{.GOOS | default OS}}'
 
-# De momento só Windows (Debian e macOS engadirán os seus Taskfile).
+# Só Windows usa task build: Debian e macOS compílanse con build-linux.sh e build-macos.sh.
 includes:
   common: ./build/Taskfile.yml
   windows: ./build/windows/Taskfile.yml

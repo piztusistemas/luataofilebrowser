@@ -26,13 +26,18 @@ var ficheirosEmbebidos embed.FS
 func lerEmbebido(nome string) ([]byte, error) {
 	datos, err := ficheirosEmbebidos.ReadFile("files/" + nome)
 	if err != nil {
-		return nil, fmt.Errorf("este instalador non leva %s (compilouse sen executar build-windows.ps1?)", nome)
+		return nil, fmt.Errorf("este instalador non leva %s (compilouse sen executar build-windows.ps1, build-linux.sh ou build-macos.sh?)", nome)
 	}
 	return datos, nil
 }
 
 // escribirEmbebido copia files/<nome> a destino. Reintenta uns segundos porque, tras
 // deter un servizo ou pechar un programa, Windows pode tardar en soltar o executable.
+//
+// Escribe nun ficheiro novo e despois renoméao por riba do vello, en vez de
+// sobrescribilo no sitio: en macOS o núcleo garda a sinatura dun executable por
+// ficheiro, e un binario reescrito no mesmo inode morre ao arrincar (SIGKILL) nos Mac
+// con Apple Silicon. En Linux evita tamén o "text file busy" se o programa está aberto.
 func escribirEmbebido(nome, destino string) error {
 	datos, err := lerEmbebido(nome)
 	if err != nil {
@@ -41,13 +46,17 @@ func escribirEmbebido(nome, destino string) error {
 	if err := os.MkdirAll(filepath.Dir(destino), 0o755); err != nil {
 		return err
 	}
+	novo := destino + ".novo"
 	var ultimo error
 	for i := 0; i < 10; i++ {
-		if ultimo = os.WriteFile(destino, datos, 0o755); ultimo == nil {
-			return nil
+		if ultimo = os.WriteFile(novo, datos, 0o755); ultimo == nil {
+			if ultimo = os.Rename(novo, destino); ultimo == nil {
+				return nil
+			}
 		}
 		time.Sleep(time.Second)
 	}
+	os.Remove(novo)
 	return fmt.Errorf("non se puido escribir %s (está aberto?): %w", destino, ultimo)
 }
 
@@ -122,6 +131,9 @@ func instalarFileBrowser(tr *Translator, usuario, contrasinal string, log func(s
 	// Pasos 11–11c: fóra o contrasinal do disco e comprobar que segue a entrar.
 	log(tr.T("fb.log.quitarpass"))
 	if err := os.WriteFile(r.Config, []byte(xerarConfigQuantum(r, porto, usuario, "")), 0o600); err != nil {
+		return 0, err
+	}
+	if err := configFBSenContrasinal(r); err != nil {
 		return 0, err
 	}
 	if err := reiniciarServizoFB(); err != nil {
@@ -203,6 +215,9 @@ func instalarTao(tr *Translator, log func(string)) error {
 	if err := escribirEmbebido(nomeBinTao, exe); err != nil {
 		return err
 	}
+	if err := prepararApp("Tao", exe); err != nil {
+		return err
+	}
 	escribirExtrasModulo("tao", dir)
 	if p := portoInstalado(); p != 0 {
 		if err := escribirServidorTao(dir, p); err != nil {
@@ -223,7 +238,7 @@ func instalarTao(tr *Translator, log func(string)) error {
 func desinstalarTao(tr *Translator, borrarDatos bool, log func(string)) error {
 	log(tr.T("log.atallosborrar"))
 	borrarAtallo("Tao")
-	dir := dirTao()
+	dir := raizApp(dirTao())
 	log("  🗑️ " + dir)
 	if err := os.RemoveAll(dir); err != nil {
 		return fmt.Errorf("borrando %s (está Tao aberto?): %w", dir, err)
@@ -252,25 +267,32 @@ func instalarLua(tr *Translator, idioma string, conDeps bool, log func(string)) 
 	if err := escribirEmbebido(nomeBinLua, exe); err != nil {
 		return err
 	}
+	if err := prepararApp("Lúa", exe); err != nil {
+		return err
+	}
 	escribirExtrasModulo("lua", dir)
 	if err := escribirIdiomaLua(idioma); err != nil {
 		log("⚠️ " + err.Error())
 	}
 	if conDeps {
-		log(tr.T("lua.log.deps"))
-		if err := instalarDepsLua(log); err != nil {
-			// Non aborta: Lúa funciona sen LaTeX (agás xerar PDF) e en Opcións pode
-			// reintentalo.
-			log(tr.T("lua.log.depsfail", err.Error()))
-		} else {
-			log(tr.T("lua.log.depsok"))
-		}
+		pasoDepsLua(tr, log)
 	}
 	log(tr.T("log.atallos"))
 	if err := crearAtallo("Lúa", exe); err != nil {
 		log(tr.T("log.atallosfail", err.Error()))
 	}
 	return nil
+}
+
+// pasoDepsLua instala LaTeX e Pandoc. Non aborta nunca: Lúa funciona sen LaTeX (agás
+// xerar PDF) e en Opcións pode reintentalo.
+func pasoDepsLua(tr *Translator, log func(string)) {
+	log(tr.T("lua.log.deps"))
+	if err := instalarDepsLua(log); err != nil {
+		log(tr.T("lua.log.depsfail", err.Error()))
+	} else {
+		log(tr.T("lua.log.depsok"))
+	}
 }
 
 func desinstalarLua(tr *Translator, borrarDeps bool, log func(string)) error {
@@ -281,7 +303,7 @@ func desinstalarLua(tr *Translator, borrarDeps bool, log func(string)) error {
 			log("⚠️ " + err.Error())
 		}
 	}
-	dir := dirLua()
+	dir := raizApp(dirLua())
 	log("  🗑️ " + dir)
 	if err := os.RemoveAll(dir); err != nil {
 		return fmt.Errorf("borrando %s (está Lúa aberta?): %w", dir, err)

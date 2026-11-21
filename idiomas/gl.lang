@@ -130,6 +130,12 @@ desinst.lua.deps = Desinstalar tamén MiKTeX e Pandoc (outros programas poden us
 desinst.lua.btn = Desinstalar Lúa
 desinst.lua.confirm = Vas desinstalar Lúa. Seguir?
 
+# ── Permisos de administrador (só macOS: ver comoAdministrador) ────
+admin.prompt = O instalador de aula precisa permisos de administrador para este paso.
+admin.log.pedindo = 🔐 Pedindo o contrasinal dun administrador…
+admin.cancelado = cancelouse o contrasinal de administrador
+admin.fallou = non se puido executar o paso con permisos de administrador
+
 # ── Variantes para Debian/Linux (ver aplicarVariantesSO en i18n.go) ──
 benvida.fb.corpo.linux = O servidor de arquivos da aula. Corre coma servizo de systemd (arrinca só co equipo) e é onde o alumnado entrega os traballos desde Tao, tanto desde Windows coma desde Linux.
 benvida.lua.corpo.linux = Documentación do departamento e problemas con Maxima, en LaTeX, Word e OpenDocument. Pode instalar tamén LaTeX (TeX Live) e Pandoc con apt.
@@ -140,3 +146,20 @@ lua.log.deps.linux = 📦 Instalando dependencias (apt)…
 log.atallos.linux = 🖥️ Creando accesos directos (menú de aplicacións)…
 fin.alumnado.corpo.linux = Descargan Tao para o seu sistema (Windows ou Linux) en github.com/piztusistemas/tao/releases. Non precisa permisos de administrador para usalo.
 desinst.lua.deps.linux = Desinstalar tamén LaTeX e Pandoc (outros programas poden usalos)
+
+# ── Variantes para macOS ──
+benvida.fb.corpo.darwin = O servidor de arquivos da aula. Corre coma servizo de launchd (arrinca só co equipo, sen iniciar sesión) e é onde o alumnado entrega os traballos desde Tao, desde Windows, Linux ou macOS.
+benvida.lua.corpo.darwin = Documentación do departamento e problemas con Maxima, en LaTeX, Word e OpenDocument. Pode instalar tamén MacTeX e Pandoc con Homebrew.
+fb.desc.darwin = Instala File Browser Quantum %s coma servizo de launchd (conta _www). Usará o porto 80 se está libre (o alumnado entra en http://este-equipo/arquivos) e, se non, o 8080. Se o firewall de macOS está activo, permite as conexións entrantes a File Browser. Pedirá o contrasinal dun administrador.
+fb.log.firewall.darwin = 🛡️ Permitindo File Browser no firewall de macOS (porto %d)…
+tao.desc.darwin = Copia Tao a %s, déixao xa apuntando ao File Browser deste equipo e engádeo a Launchpad. Pecha Tao antes de actualizalo.
+lua.desc.darwin = Copia Lúa a %s (o mesmo sitio que o seu instalador propio, que queda substituído) e engádea a Launchpad.
+lua.deps.darwin = Instalar tamén MacTeX (LaTeX, uns 6 GB), Pandoc e Poppler con Homebrew (se non está, instálase). Pode tardar entre 10 e 45 minutos e pedirá o contrasinal de administrador.
+lua.log.deps.darwin = 📦 Instalando dependencias (Homebrew)…
+log.atallos.darwin = 🖥️ Rexistrando a aplicación (Launchpad e Spotlight)…
+log.atallosborrar.darwin = 🖥️ Quitando a aplicación de Launchpad…
+fin.alumnado.corpo.darwin = Descargan Tao para o seu sistema (Windows, Linux ou macOS) en github.com/piztusistemas/tao/releases. Non precisa permisos de administrador para usalo.
+desinst.fb.desc.darwin = Detén e borra o servizo de launchd, a excepción do firewall, as contas e a configuración.
+desinst.tao.desc.darwin = Borra Tao.app.
+desinst.lua.desc.darwin = Borra Lua.app.
+desinst.lua.deps.darwin = Desinstalar tamén MacTeX, Pandoc e Poppler (outros programas poden usalos)

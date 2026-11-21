@@ -355,3 +355,14 @@ func desinstalarDepsLua(log func(string)) error {
 }
 
 func comandoOculto(n string, a ...string) *exec.Cmd { return exec.Command(n, a...) }
+
+// ── Ganchos que só usa macOS ─────────────────────────────────────────────────
+
+// O instalador xa corre como root (asegurarPrivilexios): a tarefa faise aquí mesmo.
+func comoAdministrador(tr *Translator, t tarefaAdmin, log func(string)) (map[string]any, error) {
+	return executarTarefa(tr, t, log)
+}
+
+func prepararApp(string, string) error     { return nil }
+func raizApp(dir string) string            { return dir }
+func configFBSenContrasinal(fbRutas) error { return nil } // o instalador le o config coma root
