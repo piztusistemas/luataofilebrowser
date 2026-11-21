@@ -23,7 +23,8 @@ ficheiro → reinicio → login de novo. Se Tao xa estaba configurado, actualíz
 
 - `filebrowser.go`, `instalar.go`: lóxica común a todos os sistemas.
 - `plataforma_windows.go`: servizo, ACL, firewall, accesos directos, winget.
-- `plataforma_outras.go`: sitio para Debian e macOS (aínda sen facer).
+- `plataforma_linux.go`: Debian — servizo systemd (`piztu-filebrowser`, conta `www-data`), ufw, `.desktop`, apt.
+- `plataforma_macos.go`: sitio para macOS (aínda sen facer).
 - `cmd/fbservizo`: servizo de Windows que lanza Quantum (Quantum non fala co SCM).
 
 ## Compilar (Windows)
@@ -42,3 +43,22 @@ Proba contra Quantum real (sen instalar nada no sistema):
 ```powershell
 $env:FB_BIN="files\filebrowser.exe"; go test -run Quantum -v
 ```
+
+## Debian
+
+Instala o mesmo en `/opt/piztu/{filebrowser,modulos/tao,modulos/lua}`, config en
+`/etc/filebrowser/config.yaml`, datos en `/var/lib/filebrowser`, arquivos en
+`/var/www/html/arquivos` e rexistro en `/var/log/filebrowser.log`. File Browser corre como
+servizo systemd con `www-data` (porto 80 mediante `CAP_NET_BIND_SERVICE`, se está libre;
+se non, 8080). Se `ufw` está activo ábrese o porto. Lúa pode instalar Pandoc e TeX Live con apt.
+
+O instalador necesita root: se se abre coma usuario normal relánzase con `pkexec`
+(tamén vale `sudo ./instalador-aula`).
+
+```bash
+sudo apt install build-essential pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev
+./build-linux.sh            # descarga e verifica binarios, tests, compila (tag gtk3)
+```
+
+Saída: `build/bin/instalador-aula` e o seu `.sha256`. O SHA-256 do binario Linux de
+Quantum está fixado en `build-linux.sh`.

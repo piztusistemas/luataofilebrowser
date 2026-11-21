@@ -21,6 +21,7 @@ var versionInstalador string
 func main() {
 	// En Windows non hai nada que elevar aquí: o manifesto leva requireAdministrator e
 	// UAC eleva o proceso antes de main(). Se se cancela o UAC, Windows nin o lanza.
+	asegurarPrivilexios() // Debian: relanza con pkexec se non somos root
 	app := NewApp()
 
 	wailsApp := application.New(application.Options{

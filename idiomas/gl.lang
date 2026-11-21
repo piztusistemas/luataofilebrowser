@@ -129,3 +129,14 @@ desinst.lua.desc = Borra Lúa e os seus accesos directos.
 desinst.lua.deps = Desinstalar tamén MiKTeX e Pandoc (outros programas poden usalos)
 desinst.lua.btn = Desinstalar Lúa
 desinst.lua.confirm = Vas desinstalar Lúa. Seguir?
+
+# ── Variantes para Debian/Linux (ver aplicarVariantesSO en i18n.go) ──
+benvida.fb.corpo.linux = O servidor de arquivos da aula. Corre coma servizo de systemd (arrinca só co equipo) e é onde o alumnado entrega os traballos desde Tao, tanto desde Windows coma desde Linux.
+benvida.lua.corpo.linux = Documentación do departamento e problemas con Maxima, en LaTeX, Word e OpenDocument. Pode instalar tamén LaTeX (TeX Live) e Pandoc con apt.
+fb.desc.linux = Instala File Browser Quantum %s coma servizo de systemd (conta www-data). Usará o porto 80 se está libre (o alumnado entra en http://este-equipo/arquivos) e, se non, o 8080. Se ufw está activo, abre o porto nel.
+fb.log.firewall.linux = 🛡️ Abrindo o porto %d no firewall (ufw, se está activo)…
+lua.deps.linux = Instalar tamén LaTeX (TeX Live) e Pandoc con apt. Son descargas grandes e poden tardar varios minutos.
+lua.log.deps.linux = 📦 Instalando dependencias (apt)…
+log.atallos.linux = 🖥️ Creando accesos directos (menú de aplicacións)…
+fin.alumnado.corpo.linux = Descargan Tao para o seu sistema (Windows ou Linux) en github.com/piztusistemas/tao/releases. Non precisa permisos de administrador para usalo.
+desinst.lua.deps.linux = Desinstalar tamén LaTeX e Pandoc (outros programas poden usalos)

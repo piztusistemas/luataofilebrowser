@@ -38,7 +38,7 @@ func escribirIdiomaLua(idioma string) error {
 	if idioma == "" {
 		idioma = idiomaFallback
 	}
-	base, err := os.UserConfigDir()
+	base, err := dirConfigUsuario()
 	if err != nil {
 		return fmt.Errorf("localizando o cartafol de configuración: %w", err)
 	}
@@ -56,5 +56,9 @@ func escribirIdiomaLua(idioma string) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(ruta, datos, 0o644)
+	if err := os.WriteFile(ruta, datos, 0o644); err != nil {
+		return err
+	}
+	axustarPropietario(dir)
+	return nil
 }

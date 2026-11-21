@@ -393,3 +393,8 @@ func comandoOculto(nome string, args ...string) *exec.Cmd {
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: 0x08000000} // CREATE_NO_WINDOW
 	return cmd
 }
+
+// O manifesto xa pide administrador (UAC) antes de main().
+func asegurarPrivilexios()              {}
+func dirConfigUsuario() (string, error) { return os.UserConfigDir() }
+func axustarPropietario(string)         {}

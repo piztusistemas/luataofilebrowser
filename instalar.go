@@ -143,10 +143,11 @@ func instalarFileBrowser(tr *Translator, usuario, contrasinal string, log func(s
 	if err := escribirServidorTao(dirTao(), porto); err != nil {
 		log("⚠️ tao-servidor.conf: " + err.Error())
 	}
-	if dir, err := os.UserConfigDir(); err == nil {
+	if dir, err := dirConfigUsuario(); err == nil {
 		if feito, err := actualizarAdminTao(dir, usuario, contrasinal); err != nil {
 			log(tr.T("fb.log.admintaofail", err.Error()))
 		} else if feito {
+			axustarPropietario(filepath.Join(dir, "dixitalizacion"))
 			log(tr.T("fb.log.admintao"))
 		}
 	}
@@ -186,6 +187,7 @@ func desinstalarFileBrowser(tr *Translator, borrarDatos bool, log func(string)) 
 	}
 	// O cartafol común de datos só se borra se quedou baleiro.
 	os.Remove(filepath.Dir(r.Config))
+	os.Remove(filepath.Dir(r.DB))
 	if !borrarDatos {
 		log(tr.T("desinst.fb.log.datosquedan", r.Raiz))
 	}
@@ -201,6 +203,7 @@ func instalarTao(tr *Translator, log func(string)) error {
 	if err := escribirEmbebido(nomeBinTao, exe); err != nil {
 		return err
 	}
+	escribirExtrasModulo("tao", dir)
 	if p := portoInstalado(); p != 0 {
 		if err := escribirServidorTao(dir, p); err != nil {
 			log("⚠️ tao-servidor.conf: " + err.Error())
@@ -229,7 +232,7 @@ func desinstalarTao(tr *Translator, borrarDatos bool, log func(string)) error {
 		// Datos locais de Tao DESTE usuario: admin.json (co contrasinal de admin en
 		// claro), a CA, os certificados e as copias. Os doutros usuarios do equipo
 		// quedan nos seus perfís.
-		if base, err := os.UserConfigDir(); err == nil {
+		if base, err := dirConfigUsuario(); err == nil {
 			datos := filepath.Join(base, "dixitalizacion")
 			log("  🗑️ " + datos)
 			if err := os.RemoveAll(datos); err != nil {
@@ -249,6 +252,7 @@ func instalarLua(tr *Translator, idioma string, conDeps bool, log func(string)) 
 	if err := escribirEmbebido(nomeBinLua, exe); err != nil {
 		return err
 	}
+	escribirExtrasModulo("lua", dir)
 	if err := escribirIdiomaLua(idioma); err != nil {
 		log("⚠️ " + err.Error())
 	}
@@ -292,3 +296,16 @@ func instalado(dir, exe string) bool {
 }
 
 var _ fs.FS = ficheirosEmbebidos
+
+// escribirExtrasModulo copia ao cartafol do módulo o modulo.json (e a icona) que van
+// nos zips de Linux de Tao e Lúa, se o instalador os leva (en Windows non). Opcional.
+func escribirExtrasModulo(nome, dir string) {
+	for orixe, destino := range map[string]string{
+		nome + "-modulo.json": "modulo.json",
+		nome + "-logo.png":    "logo.png",
+	} {
+		if datos, err := lerEmbebido(orixe); err == nil {
+			os.WriteFile(filepath.Join(dir, destino), datos, 0o644)
+		}
+	}
+}
