@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Manifesto de instalador-aula.exe. É o de Wails v3 cunha ÚNICA diferenza:
+  requestedExecutionLevel="requireAdministrator". Así Windows amosa o UAC e
+  eleva o proceso ANTES de que main() empece (ver main.go). Sen isto o instalador non pode escribir en Program Files nin
+  no menú Inicio de %ProgramData%.
+  OLLO: `wails3 task common:update:build-assets` reescribe este ficheiro e
+  volve a "asInvoker". Se o executas, restaura esta liña despois.
+-->
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
+    <assemblyIdentity type="win32" name="gal.omeu.piztu.instalador-aula" version="26.12.1.0" processorArchitecture="*"/>
+    <dependency>
+        <dependentAssembly>
+            <assemblyIdentity type="win32" name="Microsoft.Windows.Common-Controls" version="6.0.0.0" processorArchitecture="*" publicKeyToken="6595b64144ccf1df" language="*"/>
+        </dependentAssembly>
+    </dependency>
+    <asmv3:application>
+        <asmv3:windowsSettings>
+            <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware> <!-- fallback for Windows 7 and 8 -->
+            <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">permonitorv2,permonitor</dpiAwareness> <!-- falls back to per-monitor if per-monitor v2 is not supported -->
+        </asmv3:windowsSettings>
+    </asmv3:application>
+    <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+        <security>
+            <requestedPrivileges>
+                <requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
+            </requestedPrivileges>
+        </security>
+    </trustInfo>
+</assembly>

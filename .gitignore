@@ -1,0 +1,9 @@
+# Binarios descargados/compilados por build-windows.ps1 (nunca no repositorio)
+files/*
+!files/LEEME.txt
+build/bin/
+*.syso
+frontend/node_modules/
+frontend/dist/
+frontend/bindings/
+.task/

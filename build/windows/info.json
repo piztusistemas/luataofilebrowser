@@ -1,0 +1,15 @@
+{
+	"fixed": {
+		"file_version": "26.12.1"
+	},
+	"info": {
+		"0000": {
+			"ProductVersion": "26.12.1",
+			"CompanyName": "Piztu",
+			"FileDescription": "Instalador de aula (File Browser, Tao, Lúa)",
+			"LegalCopyright": "Copyright © Piztu",
+			"ProductName": "Instalador de aula",
+			"Comments": "Equipo do profesorado: servidor de arquivos da aula, Tao e Lúa"
+		}
+	}
+}

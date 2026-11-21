@@ -1,0 +1,131 @@
+# Instalador de aula (File Browser Quantum, Tao e Lúa) — GALEGO
+# Formato: clave = valor   (\n = salto de liña; # = comentario)
+# %s e %d substitúense no programa, na orde en que aparecen.
+
+# ── Navegación ─────────────────────────────────────────────────────
+nav.anterior = ← Anterior
+nav.seguinte = Seguinte →
+nav.pechar = Pechar
+nav.finalizar = Finalizar
+nav.idioma = Idioma
+nav.progreso = Paso %d de %d
+dialogo.cancelar = Cancelar
+dialogo.aceptar = Aceptar
+
+paso.benvida = 🏠  Benvida
+paso.filebrowser = 1  File Browser
+paso.tao = 2  Tao
+paso.lua = 3  Lúa
+paso.completado = ✅  Completado
+paso.desinstalar = 🗑️  Desinstalar
+
+app.info = Instalador de aula {v}\nMartín Pardiñas\npiztu@omeu.gal\npiztu.org
+app.licenza = Licenza AGPLv3
+
+estado.instalado = Instalado
+estado.non = Non instalado
+erro.xeral = ❌ Erro: %s
+ok.xeral = ✅ Feito.
+ocupado = Xa hai outra tarefa en marcha: agarda a que remate.
+
+# ── Benvida ────────────────────────────────────────────────────────
+benvida.titulo = Instalador de aula
+benvida.desc = Prepara o equipo do profesorado coas tres pezas da aula. Cada paso é independente: podes instalar só o que necesites, e volver a executar un paso para actualizalo.
+benvida.fb.titulo = File Browser Quantum
+benvida.fb.corpo = O servidor de arquivos da aula. Corre coma servizo de Windows (arrinca só co equipo) e é onde o alumnado entrega os traballos desde Tao, tanto desde Windows coma desde Linux.
+benvida.tao.titulo = Tao
+benvida.tao.corpo = Prácticas diarias e informes asinados. No equipo do profesorado xestiona as contas do alumnado e os certificados.
+benvida.lua.titulo = Lúa
+benvida.lua.corpo = Documentación do departamento e problemas con Maxima, en LaTeX, Word e OpenDocument. Pode instalar tamén MiKTeX e Pandoc.
+benvida.alumnado.titulo = E os equipos do alumnado?
+benvida.alumnado.corpo = Este instalador non toca os equipos do alumnado. Cada alumno/a descarga Tao das Releases (piztusistemas/tao) para o seu sistema e atopa este servidor só, se están na mesma rede.
+benvida.estado = Estado actual deste equipo
+
+# ── File Browser ───────────────────────────────────────────────────
+fb.card = File Browser Quantum
+fb.desc = Instala File Browser Quantum %s coma servizo de Windows. Usará o porto 80 se está libre (o alumnado entra en http://este-equipo/arquivos) e, se non, o 8080. Abre o porto no firewall en todos os perfís de rede, tamén en «Pública», que é como adoita quedar a wifi da aula.
+fb.reinstalar = ⚠️ File Browser xa está instalado. Reinstalalo borra as contas (tamén as do alumnado) e créaas de novo baleiras; os arquivos entregados consérvanse.
+fb.dous.titulo = ✅ Vas crear DOUS usuarios. NON son o mesmo.
+fb.dous.corpo = 🔑 admin (aquí abaixo) → a conta do SERVIDOR de ficheiros. Garda TODOS os traballos de TODO o alumnado.\n\n🧑‍🏫 director (dentro de Tao) → a TÚA conta persoal para xestionar Tao (materias, alumnado). Créase despois, a primeira vez que abras Tao, escribindo "director" como usuario.\n\nNon se poden fusionar: viven en sitios distintos e fan cousas distintas. Se escribes "admin" dentro de Tao, ou "director" no servidor, NON funcionará.\n\nRegra: "admin" só se escribe AQUÍ. "director" só se escribe DENTRO de Tao.
+fb.dous.check = Leín isto e entendo que "admin" (servidor de ficheiros) e "director" (xestión de Tao) son DOUS usuarios distintos e independentes — teño que crear os DOUS por separado.
+fb.form.usuario = Usuario administrador
+fb.form.pass = Contrasinal (mínimo 12 caracteres)
+fb.form.pass2 = Repite o contrasinal
+fb.btn = 📁 Instalar File Browser
+fb.faltan = Escribe o usuario e o contrasinal.
+fb.user.invalido = O usuario só pode levar letras, díxitos, punto, guión e guión baixo (sen espazos nin símbolos). Seguro que non escribiches aquí o contrasinal?
+fb.pass.curto = O contrasinal ten que ter polo menos 12 caracteres.
+fb.pass.distintos = Os dous contrasinais non coinciden.
+fb.log.detendo = ⏹️ Detendo o servizo anterior, se o hai…
+fb.log.porto = 🔌 Buscando porto libre (80, se non 8080)…
+fb.log.portoescollido = 🔌 Porto: %d
+fb.log.binarios = 📦 Copiando File Browser Quantum %s a %s…
+fb.log.purgando = 🧹 Borrando contas e configuración anteriores (os arquivos quedan)…
+fb.log.config = 📝 Escribindo config.yaml…
+fb.log.servizo = ⚙️ Creando e arrincando o servizo…
+fb.log.agardando = ⏳ Agardando a que File Browser responda…
+fb.log.login = 🔑 Comprobando que o administrador entra…
+fb.log.quitarpass = 🔒 Quitando o contrasinal do config.yaml e reiniciando…
+fb.log.firewall = 🛡️ Abrindo o porto %d no firewall de Windows…
+fb.log.firewallfail = ⚠️ Non se puido abrir o firewall (%s): o alumnado non chegará ao servidor ata abrilo á man.
+fb.log.admintao = 🔑 Credenciais de admin de Tao actualizadas (admin.json).
+fb.log.admintaofail = ⚠️ Non se puido actualizar admin.json de Tao: %s
+fb.log.urls = 🌐 O alumnado pode entrar en:
+fb.urls.titulo = Enderezos para o alumnado
+fb.urls.nota = Tao proba el só o nome do equipo e os portos 80 e 8080. Se non o atopa (por exemplo, nomes de equipo sen patrón de aula), o alumnado escribe un destes enderezos na pantalla de acceso. A IP funciona sempre; os nomes dependen da rede.
+
+# ── Tao ────────────────────────────────────────────────────────────
+tao.card = Tao
+tao.desc = Copia Tao a %s, déixao xa apuntando ao File Browser deste equipo e crea os accesos directos. Pecha Tao antes de actualizalo.
+tao.btn = 📝 Instalar Tao
+tao.log.copiando = 📦 Copiando Tao a %s…
+tao.log.servidor = 🌐 Servidor por defecto: %s
+tao.log.senfb = ℹ️ File Browser non está instalado neste equipo: Tao pedirá o servidor ao abrilo.
+tao.primeiro.titulo = Primeira vez
+tao.primeiro.corpo = A primeira vez que abras Tao, crea a túa conta escribindo "director" como usuario. O administrador de File Browser do paso 1 vai na configuración de administración de Tao; se Tao xa estaba configurado neste usuario, o paso 1 actualizouno el só.
+
+# ── Lúa ────────────────────────────────────────────────────────────
+lua.card = Lúa
+lua.desc = Copia Lúa a %s (o mesmo sitio que o seu instalador propio, que queda substituído) e crea os accesos directos.
+lua.deps = Instalar tamén MiKTeX (LaTeX, para xerar PDF) e Pandoc con winget. Son descargas grandes e poden tardar varios minutos.
+lua.btn = 📐 Instalar Lúa
+lua.log.copiando = 📦 Copiando Lúa a %s…
+lua.log.deps = 📦 Instalando dependencias (winget)…
+lua.log.depsok = ✅ Dependencias listas.
+lua.log.depsfail = ⚠️ Dependencias: %s. Lúa funciona igual agás para xerar PDF; podes reintentalo desde Lúa → Opcións.
+
+log.atallos = 🖥️ Creando accesos directos (menú Inicio e escritorio)…
+log.atallosfail = ⚠️ Accesos directos: %s
+log.atallosborrar = 🖥️ Borrando accesos directos…
+
+# ── Completado ─────────────────────────────────────────────────────
+fin.titulo = Listo
+fin.desc = Resumo deste equipo. Podes volver a calquera paso desde a barra lateral.
+fin.alumnado.titulo = Para o alumnado
+fin.alumnado.corpo = Descargan Tao para o seu sistema (Windows ou Linux) en github.com/piztusistemas/tao/releases. Non precisa permisos de administrador para usalo.
+fin.arquivos = Arquivos entregados: %s
+fin.rexistro = Rexistro do servizo: %s
+
+# ── Desinstalar ────────────────────────────────────────────────────
+desinst.titulo = ⚠️ Zona de perigo
+desinst.intro = Cada botón quita só a súa peza. Pídese confirmación porque non se pode desfacer.
+desinst.palabra = DESINSTALAR
+desinst.confirmar.label = Escribe %s para confirmar
+desinst.fb.card = File Browser Quantum
+desinst.fb.desc = Detén e borra o servizo, a regra do firewall, as contas e a configuración.
+desinst.fb.datos = Borrar tamén os arquivos entregados polo alumnado (%s)
+desinst.fb.btn = Desinstalar File Browser
+desinst.fb.confirm = Vas desinstalar File Browser. O alumnado deixará de poder entregar. Seguir?
+desinst.fb.log.servizo = ⏹️ Detendo e borrando o servizo…
+desinst.fb.log.firewall = 🛡️ Quitando a regra do firewall…
+desinst.fb.log.datosquedan = ℹ️ Os arquivos do alumnado quedan en %s.
+desinst.tao.card = Tao
+desinst.tao.desc = Borra Tao e os seus accesos directos.
+desinst.tao.datos = Borrar tamén os datos de Tao deste usuario: credenciais, CA, certificados do alumnado e copias. Sen eles non se poden asinar máis informes con esta CA.
+desinst.tao.btn = Desinstalar Tao
+desinst.tao.confirm = Vas desinstalar Tao. Seguir?
+desinst.lua.card = Lúa
+desinst.lua.desc = Borra Lúa e os seus accesos directos.
+desinst.lua.deps = Desinstalar tamén MiKTeX e Pandoc (outros programas poden usalos)
+desinst.lua.btn = Desinstalar Lúa
+desinst.lua.confirm = Vas desinstalar Lúa. Seguir?

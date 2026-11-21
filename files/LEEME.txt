@@ -1,0 +1,1 @@
+Este cartafol énchese con build-windows.ps1 (binarios de File Browser, Tao, Lúa e fbservizo).
